@@ -19,6 +19,12 @@ module.exports = function (app) {
     );
 
     app.post(
+        "/api/groups",
+        [authJwt.verifyToken],
+        groupController.postGroups
+    );
+
+    app.post(
         "/api/auth/signup",
         [
             verifySignUp.checkDuplicateUsernameOrEmail
