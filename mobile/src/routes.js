@@ -8,9 +8,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 
-import SelectProvider from './pages/New/SelectProvider';
-import SelectDateTime from './pages/New/SelectDateTime';
-import Confirm from './pages/New/Confirm';
+//import SelectProvider from './pages/New/SelectProvider';
+//import SelectDateTime from './pages/New/SelectDateTime';
+//import Confirm from './pages/New/Confirm';
 
 //import Dashboard from '~/pages/Dashboard';
 //import Profile from '~/pages/Profile';
