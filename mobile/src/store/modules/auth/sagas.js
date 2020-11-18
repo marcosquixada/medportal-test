@@ -9,33 +9,61 @@ export function* signIn({ payload }) {
   try {
     const { email, password } = payload;
 
-    const response = yield call(api.post, 'sessions', {
-      email,
-      password,
+    /*
+    //funcionando
+    axios.get(`http://10.0.2.2:8080`)
+      .then(res => {
+        const nameList = res.data;
+        console.log(nameList);
+      })*/
+
+    let data = JSON.stringify({
+      username: email,
+      password: password
     });
 
-    const { token, user } = response.data;
+    api.post('api/auth/signin', data, { 
+      headers: { "Content-Type": "application/json" } 
+    }).catch(error => {
+      console.log(error);
+    }).then(res => {
+      const nameList = res.data;
+      console.log(nameList);
 
-    if (user.provider) {
-      Alert.alert(
-        'Erro no login',
-        'O usuário não pode ser prestador de serviços',
-      );
-      return;
-    }
+      const { accessToken, username } = res.data;
 
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+      //api.defaults.headers.Authorization = `Bearer ${accessToken}`;
 
-    // delay no loading do button Acessar
-    yield delay(2000);
+      // delay no loading do button Acessar
+      //yield delay(2000);
 
-    yield put(signInSuccess(token, user));
+      //yield put(signInSuccess(accessToken, username));
+
+      console.log('Login efetuado com sucesso.');
+    });
+
+    /*axios.post('http://10.0.2.2:8080/api/auth/signin',
+      {
+        email,
+        password,
+      }, { "Content-Type": "application/json" }).catch(error => {
+        console.log(error);
+      }).then(res => {
+        const nameList = res.data;
+        console.log(nameList);
+      });*/
+
+    /*const response = yield call(api.post, 'api/auth/signin', {
+      email,
+      password,
+    });*/
 
     // history.push('/dashboard');
   } catch (err) {
+    console.log(err);
     Alert.alert(
       'Falha na autenticação',
-      'Houve um erro no login, verifique seus dados!',
+      'Houve um erro no login, verifique seus dados!' + err.message,
     );
 
     yield put(signFailure());
@@ -66,10 +94,10 @@ export function* signUp({ payload }) {
 export function setToken({ payload }) {
   if (!payload) return;
 
-  const { token } = payload.auth;
+  const { accessToken } = payload.auth;
 
-  if (token) {
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+  if (accessToken) {
+    api.defaults.headers.Authorization = `x-access-token ${accessToken}`;
   }
 }
 

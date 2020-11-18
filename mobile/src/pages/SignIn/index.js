@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Image } from 'react-native';
+import { Image, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo2.png';
 
 import Backgound from '../../components/Background';
 import { signInRequest } from '../../store/modules/auth/actions';
@@ -27,6 +27,10 @@ export default function SignIn({ navigation }) {
 
   function handleSubmit() {
     dispatch(signInRequest(email, password));
+  }
+
+  function teste(){
+    Alert.alert("teste", "teste");
   }
 
   return (
@@ -58,9 +62,9 @@ export default function SignIn({ navigation }) {
             onChangeText={setPassword}
           />
 
-          <SubmitButton loading={loading} onPress={handleSubmit}>
-            Acessar
-          </SubmitButton>
+          <SignLink onPress={handleSubmit}>
+            <SignLinkText>Acessar</SignLinkText>
+          </SignLink>
         </Form>
 
         <SignLink onPress={() => navigation.navigate('SignUp')}>
