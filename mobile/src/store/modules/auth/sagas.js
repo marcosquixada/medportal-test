@@ -27,17 +27,17 @@ export function* signIn({ payload }) {
     }).catch(error => {
       console.log(error);
     }).then(res => {
-      const nameList = res.data;
-      console.log(nameList);
+      //const nameList = res.data;
+      //console.log(nameList);
 
       const { accessToken, username } = res.data;
 
       //api.defaults.headers.Authorization = `Bearer ${accessToken}`;
 
-      // delay no loading do button Acessar
-      //yield delay(2000);
+      //delay no loading do button Acessar
+      yield delay(2000);
 
-      //yield put(signInSuccess(accessToken, username));
+      yield put(signInSuccess(accessToken, username));
 
       console.log('Login efetuado com sucesso.');
     });
@@ -57,8 +57,6 @@ export function* signIn({ payload }) {
       email,
       password,
     });*/
-
-    // history.push('/dashboard');
   } catch (err) {
     console.log(err);
     Alert.alert(

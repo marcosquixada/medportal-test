@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Image, Alert } from 'react-native';
+import { Image } from 'react-native';
 //import { useDispatch, useSelector } from 'react-redux';
 
 import logo from '../../assets/logo2.png';
-import api from '../../service/api';
 
 import Backgound from '../../components/Background';
 //import { signInRequest } from '../../store/modules/auth/actions';
@@ -17,48 +16,20 @@ import {
   SignLinkText,
 } from './styles';
 
-export default function SignIn({ navigation }) {
+export default function SignUp({ navigation }) {
   //const dispatch = useDispatch();
+
+  const emailRef = useRef();
   const passwordRef = useRef();
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   //const loading = useSelector(state => state.auth.loading);
 
   function handleSubmit() {
-    //dispatch(signInRequest(email, password));
-
-    //const { email, password } = payload;
-
-    /*
-    //funcionando
-    axios.get(`http://10.0.2.2:8080`)
-      .then(res => {
-        const nameList = res.data;
-        console.log(nameList);
-      })*/
-
-    let data = JSON.stringify({
-      username: email,
-      password: password
-    });
-
-    api.post('api/auth/signin', data, {
-      headers: { "Content-Type": "application/json" }
-    }).catch(error => {
-      console.log(error);
-    }).then(res => {
-      const { accessToken, username } = res.data;
-
-      navigation.navigate('Dashboard');
-
-      console.log('Login efetuado com sucesso.');
-    });
-  }
-
-  function teste(){
-    Alert.alert("teste", "teste");
+    //dispatch(signUpRequest(name, email, password));
   }
 
   return (
@@ -68,11 +39,22 @@ export default function SignIn({ navigation }) {
 
         <Form>
           <FormInput
+            icon="person-outline"
+            autoCorrect={false}
+            placeholder="Nome completo"
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current.focus()}
+            value={name}
+            onChangeText={setName}
+          />
+
+          <FormInput
             icon="mail-outline"
             keyboardType="email-address"
             autoCorrect={false}
             autoCapitalize="none"
             placeholder="Digite seu e-mail"
+            ref={emailRef}
             returnKeyType="next"
             onSubmitEditing={() => passwordRef.current.focus()}
             value={email}
@@ -90,13 +72,13 @@ export default function SignIn({ navigation }) {
             onChangeText={setPassword}
           />
 
-          <SignLink onPress={handleSubmit}>
-            <SignLinkText>Acessar</SignLinkText>
-          </SignLink>
+          <SubmitButton onPress={handleSubmit}>
+            Criar conta
+          </SubmitButton>
         </Form>
 
-        <SignLink onPress={() => navigation.navigate('SignUp')}>
-          <SignLinkText>Criar conta gratuita</SignLinkText>
+        <SignLink onPress={() => navigation.navigate('SignIn')}>
+          <SignLinkText>Já tenho conta</SignLinkText>
         </SignLink>
       </Container>
     </Backgound>

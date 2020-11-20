@@ -1,12 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Image, Alert } from 'react-native';
-//import { useDispatch, useSelector } from 'react-redux';
+import { Image, Alert, Button } from 'react-native';
 
 import logo from '../../assets/logo2.png';
 import api from '../../service/api';
 
 import Backgound from '../../components/Background';
-//import { signInRequest } from '../../store/modules/auth/actions';
 
 import {
   Container,
@@ -26,7 +24,7 @@ export default function SignIn({ navigation }) {
 
   //const loading = useSelector(state => state.auth.loading);
 
-  function handleSubmit() {
+  function handleSubmit () {
     //dispatch(signInRequest(email, password));
 
     //const { email, password } = payload;
@@ -43,22 +41,20 @@ export default function SignIn({ navigation }) {
       username: email,
       password: password
     });
-
+    
     api.post('api/auth/signin', data, {
       headers: { "Content-Type": "application/json" }
     }).catch(error => {
       console.log(error);
     }).then(res => {
+      
       const { accessToken, username } = res.data;
 
       navigation.navigate('Dashboard');
 
       console.log('Login efetuado com sucesso.');
+      console.log(accessToken, username);
     });
-  }
-
-  function teste(){
-    Alert.alert("teste", "teste");
   }
 
   return (
@@ -90,9 +86,11 @@ export default function SignIn({ navigation }) {
             onChangeText={setPassword}
           />
 
-          <SignLink onPress={handleSubmit}>
-            <SignLinkText>Acessar</SignLinkText>
-          </SignLink>
+          <Button onPress={() => {
+            handleSubmit();
+          }} title="Acessar">
+            Acessar
+          </Button>
         </Form>
 
         <SignLink onPress={() => navigation.navigate('SignUp')}>
