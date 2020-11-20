@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 //import api from '~/services/api';
 
@@ -9,26 +12,51 @@ import { Container, Title, List } from './styles';
 import Background from '../../components/Background';
 import Grupo from '../../components/Grupo';
 
-const data = [{
-  "id": 1, "nome": "Grupo 1",
-  "id": 2, "nome": "Grupo 2",
-  "id": 3, "nome": "Grupo 3",
-}];
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 22
+  },
+  sectionHeader: {
+    paddingTop: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 2,
+    fontSize: 14,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(247,247,247,1.0)',
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+  },
+})
 
-function Dashboard({ isFocused }) {
-  const [grupos, setGrupos] = useState([]);
+function Dashboard(props) {
+  //const grupos = ;
 
-  async function loadGrupos() {
+  /*const [grupos, setGrupos] = useState([
+    { key: '1', nome: 'Grupo 1' },
+    { key: 'Dan', nome: 'Grupo 2' },
+    { key: 'Dominic', nome: 'Grupo 3' },
+    { key: 'Jackson', nome: 'Grupo 4' },
+  ]);*/
+
+  const [grupos, setGrupos] = useState(props.navigation.state.params.paramName);
+  //const { params } = props.navigation.state;
+
+  async function loadGrupos(grupos) {
     //const response = await api.get('grupos');
-
-    setGrupos(data);
+    console.warn('grupos', props.navigation.state.params.paramName);
+    setGrupos(grupos);
   }
 
   useEffect(() => {
-    if (isFocused) {
-      loadGrupos();
-    }
-  }, [isFocused]);
+    //if (isFocused) {
+    loadGrupos(grupos);
+    //}
+  }, []);
 
   /*async function handleCancel(id) {
     //const response = await api.delete(`grupos/${id}`);
@@ -50,12 +78,9 @@ function Dashboard({ isFocused }) {
       <Container>
         <Title>Grupos</Title>
 
-        <List
+        <FlatList
           data={grupos}
-          keyExtractor={item => String(item)}
-          renderItem={({ item }) => (
-            <Grupo data={item} />
-          )}
+          renderItem={({ item }) => <Grupo data={item} />}
         />
       </Container>
     </Background>

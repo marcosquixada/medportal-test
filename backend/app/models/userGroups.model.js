@@ -3,7 +3,7 @@ const User = db.User;
 const Group = db.Group;
 
 module.exports = (sequelize, Sequelize) => {
-    const UserGroups = sequelize.define('user_groups', {
+    const UserGroups = sequelize.define('usergroups', {
         UserId: {
             type: Sequelize.INTEGER,
             references: {

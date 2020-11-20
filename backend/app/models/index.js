@@ -26,17 +26,13 @@ db.sequelize = sequelize;
 
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.group = require("./group.model.js")(sequelize, Sequelize);
-db.user_groups = require("./userGroups.model.js")(sequelize, Sequelize);
+//db.usergroups = require("./userGroups.model.js")(sequelize, Sequelize);
 
 db.group.belongsToMany(db.user, {
-    through: "user_groups",
-    foreignKey: "groupId",
-    otherKey: "userId"
+    through: "usergroups"
 });
 db.user.belongsToMany(db.group, {
-    through: "user_groups",
-    foreignKey: "userId",
-    otherKey: "groupId"
+    through: "usergroups"
 });
 
 module.exports = db;

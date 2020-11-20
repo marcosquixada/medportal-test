@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Image, Alert, Button } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import logo from '../../assets/logo2.png';
 import api from '../../service/api';
@@ -48,12 +49,12 @@ export default function SignIn({ navigation }) {
       console.log(error);
     }).then(res => {
       
-      const { accessToken, username } = res.data;
+      const { accessToken, username, groups } = res.data;
 
-      navigation.navigate('Dashboard');
+      navigation.navigate('Dashboard', { paramName: groups });
 
       console.log('Login efetuado com sucesso.');
-      console.log(accessToken, username);
+      console.log(accessToken, username, groups);
     });
   }
 
