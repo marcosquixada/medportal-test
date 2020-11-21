@@ -9,7 +9,6 @@ const sequelize = new Sequelize(
         host: config.HOST,
         dialect: config.dialect,
         operatorsAliases: false,
-
         pool: {
             max: config.pool.max,
             min: config.pool.min,
@@ -26,7 +25,7 @@ db.sequelize = sequelize;
 
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.group = require("./group.model.js")(sequelize, Sequelize);
-//db.usergroups = require("./userGroups.model.js")(sequelize, Sequelize);
+db.usergroups = require("./usergroups.model.js")(sequelize, Sequelize);
 
 db.group.belongsToMany(db.user, {
     through: "usergroups"

@@ -1,6 +1,8 @@
 const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
+const Group = db.group;
+const UserGroups = db.usergroups;
 
 const Op = db.Sequelize.Op;
 
@@ -26,7 +28,8 @@ exports.signin = (req, res) => {
     User.findOne({
         where: {
             username: req.body.username
-        }
+        },
+        include: Group
     })
         .then(user => {
             if (!user) {
@@ -49,18 +52,12 @@ exports.signin = (req, res) => {
                 expiresIn: 86400 // 24 hours
             });
 
-            var grupos = [];
-            user.getGroups().then(groups => {
-                for (let i = 0; i < groups.length; i++) {
-                    grupos.push(groups[i].name.toUpperCase());
-                }
-                res.status(200).send({
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    groups: grupos,
-                    accessToken: token
-                });
+            res.status(200).send({
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                groups: user.groups,
+                accessToken: token
             });
         })
         .catch(err => {

@@ -21,12 +21,17 @@ const db = require("./app/models");
 const Group = db.group;
 
 //grop and create database
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync().then(() => {
     console.log('Carregando Grupos Padrão...');
     initial();
 });
 
+//const queryInterface = db.sequelize.getQueryInterface();
+
 function initial() {
+    //queryInterface.addColumn('usergroups', 'createdAt', { type: db.Sequelize.DATE });
+    //queryInterface.addColumn('usergroups', 'updatedAt', { type: db.Sequelize.DATE });
+
     Group.create({
         id: 1,
         name: "Bares & Restaurantes"

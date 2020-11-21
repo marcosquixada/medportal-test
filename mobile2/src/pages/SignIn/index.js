@@ -48,13 +48,18 @@ export default function SignIn({ navigation }) {
     }).catch(error => {
       console.log(error);
     }).then(res => {
-      
-      const { accessToken, username, groups } = res.data;
+      api.get('api/groups', {
+        headers: { "x-access-token": res.data.accessToken }
+      }).catch(error => {
+        console.log(error);
+      }).then(groupsAll => {
+        //console.log('groupsAll', groupsAll.data);
+        const { accessToken, id, groups } = res.data;
 
-      navigation.navigate('Dashboard', { paramName: groups });
+        navigation.navigate('Dashboard', { selectedGroups: groups, groupsAll: groupsAll.data, accessToken: accessToken });
 
-      console.log('Login efetuado com sucesso.');
-      console.log(accessToken, username, groups);
+        console.log('Login efetuado com sucesso.');
+      });
     });
   }
 

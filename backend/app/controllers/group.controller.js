@@ -2,13 +2,13 @@
 const db = require('../models');
 const Group = db.group;
 const User = db.user;
+const UserGroups = db.usergroups;
 
 var UserGroup = db.sequelize.define('usergroups', {
     userId: db.Sequelize.INTEGER,
     groupId: db.Sequelize.INTEGER
 }, {
-    tableName: 'usergroups',
-    timestamps: false
+    tableName: 'usergroups'
 });
 
 exports.listAll = (req, res) => {

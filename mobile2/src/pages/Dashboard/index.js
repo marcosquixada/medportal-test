@@ -2,76 +2,48 @@ import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-
-
-//import api from '~/services/api';
 
 import { Container, Title, List } from './styles';
 
 import Background from '../../components/Background';
 import Grupo from '../../components/Grupo';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 22
-  },
-  sectionHeader: {
-    paddingTop: 2,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 2,
-    fontSize: 14,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(247,247,247,1.0)',
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-})
+import api from '../../service/api';
 
 function Dashboard(props) {
-  //const grupos = ;
+  let [selectedGroups, setSelectedGroups] = useState(props.navigation.state.params.selectedGroups);
+  const [groupsAll, setGroupsAll] = useState(props.navigation.state.params.groupsAll.groups);
 
-  /*const [grupos, setGrupos] = useState([
-    { key: '1', nome: 'Grupo 1' },
-    { key: 'Dan', nome: 'Grupo 2' },
-    { key: 'Dominic', nome: 'Grupo 3' },
-    { key: 'Jackson', nome: 'Grupo 4' },
-  ]);*/
+  async function loadSelectedGroups(selectedGroups) {
+    console.warn('groups', props.navigation.state.params.selectedGroups);
+    setSelectedGroups(selectedGroups);
+  }
 
-  const [grupos, setGrupos] = useState(props.navigation.state.params.paramName);
-  //const { params } = props.navigation.state;
-
-  async function loadGrupos(grupos) {
-    //const response = await api.get('grupos');
-    console.warn('grupos', props.navigation.state.params.paramName);
-    setGrupos(grupos);
+  async function loadGroupsAll() {
+    /*api.get('api/groups', {
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": props.navigation.state.params.accessToken
+      }
+    }).catch((err) => {
+      console.log('parece que deu algum erro manolow2');
+      console.log(err.message);
+    }).then((todosGrupos)=>{
+      setGroupsAll(todosGrupos);
+    });*/
+    console.log(props.navigation.state.params.selectedGroups);
   }
 
   useEffect(() => {
-    //if (isFocused) {
-    loadGrupos(grupos);
-    //}
+    loadGroupsAll();
   }, []);
 
-  /*async function handleCancel(id) {
-    //const response = await api.delete(`grupos/${id}`);
-
-    setGrupos(
-      grupos.map(grupo =>
-        grupo.id === id
-          ? {
-              ...grupo,
-              //canceled_at: response.data.canceled_at,
-            }
-          : grupo,
-      ),
-    );
-  }*/
+  function findIt(id){
+    let elem = selectedGroups.find(e => e.id === id);
+    if(elem)
+      return true;
+    else return false;
+  }
 
   return (
     <Background>
@@ -79,8 +51,12 @@ function Dashboard(props) {
         <Title>Grupos</Title>
 
         <FlatList
-          data={grupos}
-          renderItem={({ item }) => <Grupo data={item} />}
+          data={groupsAll}
+          renderItem={({ item }) =>
+            <View>
+              <Grupo data={item.name} selected={findIt(item.id)} />
+            </View>
+          }
         />
       </Container>
     </Background>
