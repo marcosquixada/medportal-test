@@ -20,13 +20,22 @@ exports.listAll = (req, res) => {
 };
 
 exports.postGroups = (req, res) => {
+    console.log(req.body.groups);
+    UserGroup.destroy({
+        where: {
+            UserId: req.body.userId
+        }
+    });
     req.body.groups.forEach(function (val, index) {
-        //db.sequelize.query("INSERT INTO usergroups(groupId, userId) values (" + val.groupId + ", " + val.userId + ")");
-        UserGroup.create({
-            userId: val.userId,
-            groupId: val.groupId
-        });
+        if(val.check){
+            UserGroup.create({
+                userId: req.body.userId,
+                groupId: val.id,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+        }
     });
 
-    res.send(200).send({ message: "Groups cadastrados com sucesso!" });
+    res.send(200).send({ message: "Grupos cadastrados com sucesso!" });
 }

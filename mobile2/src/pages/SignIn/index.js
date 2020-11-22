@@ -17,26 +17,12 @@ import {
 } from './styles';
 
 export default function SignIn({ navigation }) {
-  //const dispatch = useDispatch();
   const passwordRef = useRef();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  //const loading = useSelector(state => state.auth.loading);
-
   function handleSubmit () {
-    //dispatch(signInRequest(email, password));
-
-    //const { email, password } = payload;
-
-    /*
-    //funcionando
-    axios.get(`http://10.0.2.2:8080`)
-      .then(res => {
-        const nameList = res.data;
-        console.log(nameList);
-      })*/
 
     let data = JSON.stringify({
       username: email,
@@ -53,10 +39,9 @@ export default function SignIn({ navigation }) {
       }).catch(error => {
         console.log(error);
       }).then(groupsAll => {
-        //console.log('groupsAll', groupsAll.data);
         const { accessToken, id, groups } = res.data;
 
-        navigation.navigate('Dashboard', { selectedGroups: groups, groupsAll: groupsAll.data, accessToken: accessToken });
+        navigation.navigate('Dashboard', { id, selectedGroups: groups, groupsAll: groupsAll.data, accessToken: accessToken });
 
         console.log('Login efetuado com sucesso.');
       });

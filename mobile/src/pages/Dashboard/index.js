@@ -9,15 +9,16 @@ import { Container, Title, List } from './styles';
 import Background from '~/components/Background';
 import Appointment from '~/components/Appointment';
 
-// const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function Dashboard({ isFocused }) {
   const [appointments, setAppointments] = useState([]);
 
   async function loadAppointments() {
-    const response = await api.get('appointments');
+    //const response = await api.get('appointments');
 
-    setAppointments(response.data);
+    //setAppointments(response.data);
+    setAppointments(data);
   }
 
   useEffect(() => {

@@ -35,9 +35,9 @@ export function* signIn({ payload }) {
       //api.defaults.headers.Authorization = `Bearer ${accessToken}`;
 
       //delay no loading do button Acessar
-      yield delay(2000);
+      //yield delay(2000);
 
-      yield put(signInSuccess(accessToken, username));
+      //yield put(signInSuccess(accessToken, username));
 
       console.log('Login efetuado com sucesso.');
     });
