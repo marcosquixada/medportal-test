@@ -59,7 +59,7 @@ export default function SignIn({ navigation }) {
             keyboardType="email-address"
             autoCorrect={false}
             autoCapitalize="none"
-            placeholder="Digite seu e-mail"
+            placeholder="Digite seu Nome de Usuário"
             returnKeyType="next"
             onSubmitEditing={() => passwordRef.current.focus()}
             value={email}

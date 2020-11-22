@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
         password: bcrypt.hashSync(req.body.password, 8)
     })
         .then(() => {
-            res.send({ message: "Usuário cadastrado com sucesso!" });
+            res.status(200).send({ message: "Usuário cadastrado com sucesso!" });
         })
         .catch(err => {
             res.status(500).send({ message: err.message });
