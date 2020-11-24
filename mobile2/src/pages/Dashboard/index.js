@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Component } from 'react';
 import { Button, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
-
-//import api from '~/services/api';
+import OneSignal from 'react-native-onesignal';
 
 import { Container, Title, List } from './styles';
 
@@ -12,78 +11,92 @@ import Appointment from '../../components/Appointment';
 
 import api from '../../service/api';
 
-// const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+class Dashboard extends Component {
+  //const [grupos, setGrupos] = useState(props.navigation.state.params.groupsAll.groups);
+  //let [selectedGroups, setSelectedGroups] = useState(props.navigation.state.params.selectedGroups);
+  constructor(props) {
+    super(props);
 
-function Dashboard(props) {
-  const [grupos, setGrupos] = useState(props.navigation.state.params.groupsAll.groups);
-  let [selectedGroups, setSelectedGroups] = useState(props.navigation.state.params.selectedGroups);
+    let { navigation } = this.props;
 
-  function loadGrupos(id){
-    setGrupos(
-      grupos.map((grupo) => {
-        let check = isThere(grupo.id) ? "check" : "";
+    this.state = {
+      userId: navigation.state.params.id,
+      grupos: navigation.state.params.groupsAll.groups,
+      selectedGroups: navigation.state.params.selectedGroups,
+      accessToken: navigation.state.params.accessToken
+    }
+
+    //this.setState({ grupos: items });
+
+    //console.log(userId, grupos, selectedGroups);
+
+    //console.log(navigation.state.params);
+
+    /*this.setState = {
+      grupos = navigation.getParam('groupsAll').groups,
+      selectedGroups = navigation.getParam('selectedGroups')
+    }*/
+    
+    OneSignal.init("5d6fa2a1-da5c-44ef-8cee-a660f69ee3fd");
+
+    OneSignal.addEventListener('opened', this.onOpened);
+  }
+
+  subscribe(group) {
+    OneSignal.sendTag(group, "1");
+  }
+
+  unsubscribe(group) {
+    OneSignal.sendTag(group, "0");
+  }
+
+  componentWillUnmount() {
+    OneSignal.removeEventListener('opened', this.onOpened);
+  }
+
+  onOpened(openResult) {
+    console.log('Message: ', openResult.notification.payload.body);
+    console.log('openResult: ', openResult);
+  }
+
+  componentDidMount(){
+    let items = this.state.grupos.map((grupo) => {
+        let elem = this.state.selectedGroups.find(e => e.id === id);
+        let check = typeof(elem) !== "undefined" ? "check" : "";
         return { ...grupo, "check": check }
-      })
-    )
+      });
+
+    this.setState({grupos: items});
   }
 
-  useEffect(() => {
-    loadGrupos();
-  }, []);
-
-  function isThere(id) {
-    let elem = selectedGroups.find(e => e.id === id);
-    if (elem)
-      return true;
-    else
-      return false;
-  }
-
-  function _onPress(id) {
+  _onPress = (id) => {
     let items;
 
-    items = grupos.map((item) => {
+    items = this.state.grupos.map((item) => {
       if (item.id === id){
-        if (item.check)
+        if (item.check) { 
           item.check = "";
-        else
+          //enviando para o one signal unsubscribe
+          this.unsubscribe(item.tag);
+        } else {
           item.check = "check";
+          //enviando para o one signal subscribe
+          this.subscribe(item.tag);
+        }
       }
       return item;
     });
-    setGrupos(items);
+    this.setState({grupos: items});
   }
   
-  async function handleUpdate() {
-    /*await grupos.map((grupo)=>{
-      if (checked(grupo.id)) {
-        //incluir no array a ser enviado
-        if(!isThere(grupo.id)){
-          //não está no array, incluir
-          selectedGroups["id"] = id;
-        } 
-      } else {
-        //não está ticado, se tiver no array, excluir
-        if(isThere(grupo.id)){
-          setSelectedGroups(
-            //manter só quem tem o id diferente daquele
-            selectedGroups.filter(grupo =>
-              (grupo.id !== id)
-            ),
-          );
-        }
-      }
-    });*/
-
+  handleUpdate = () => {
     let data = {
-      "userId": props.navigation.state.params.id,
-      "groups": grupos
+      "userId": this.state.userId,
+      "groups": this.state.grupos
     };
 
-    console.log(data);
-
     api.post('api/groups', data, {
-      headers: { "x-access-token": props.navigation.state.params.accessToken }
+      headers: { "x-access-token": this.state.accessToken }
     }).catch(error => {
       console.log(error);
     }).then(res => {
@@ -95,24 +108,28 @@ function Dashboard(props) {
     });
   }
 
-  return (
-    <Background>
-      <Container>
-        <Title>Grupos</Title>
+  render(){
+    //let { navigation } = this.props;
 
-        <List
-          data={grupos}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => { _onPress(item.id) }}>
-              <Appointment item={item} />
-            </TouchableOpacity>
-          )}
-        />
-        <Button onPress={() => handleUpdate()} title="Atualizar" />
-      </Container>
-    </Background>
-  );
+    return (
+      <Background>
+        <Container>
+          <Title>Grupos</Title>
+
+          <List
+            data={this.state.grupos}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => { this._onPress(item.id) }}>
+                <Appointment item={item} />
+              </TouchableOpacity>
+            )}
+          />
+          <Button onPress={() => this.handleUpdate()} title="Atualizar" />
+        </Container>
+      </Background>
+    );
+  }
 }
 
 Dashboard.navigationOptions = {

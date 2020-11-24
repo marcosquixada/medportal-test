@@ -21,7 +21,7 @@ const db = require("./app/models");
 const Group = db.group;
 
 //grop and create database
-db.sequelize.sync().then(() => {
+db.sequelize.sync({force: true}).then(() => {
     console.log('Carregando Grupos Padrão...');
     initial();
 });
@@ -34,22 +34,26 @@ function initial() {
 
     Group.create({
         id: 1,
-        name: "Bares & Restaurantes"
+        name: "Bares & Restaurantes",
+        tag: "grupo-bares"
     });
 
     Group.create({
         id: 2,
-        name: "Lazer & Viagens"
+        name: "Lazer & Viagens",
+        tag: "grupo-lazer"
     });
 
     Group.create({
         id: 3,
-        name: "Moda Feminina"
+        name: "Moda Feminina",
+        tag: "grupo-moda-feminina"
     });
 
     Group.create({
         id: 4,
-        name: "Moda Masculina"
+        name: "Moda Masculina",
+        tag: "grupo-moda-masculina"
     });
 }
 
