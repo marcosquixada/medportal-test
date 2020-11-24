@@ -38,6 +38,8 @@ $ node server.js
 
 ### 🎲 Rodando o Front End (APP)
 
+```bash
+
 # Acesse uma nova pasta do projeto no terminal/cmd
 $ cd mobile2
 
