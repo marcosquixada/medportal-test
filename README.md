@@ -34,11 +34,15 @@ $ node server.js
 
 # O servidor inciará na porta:8080 - acesse <http://localhost:8080>
 
+### 🎲 Rodando o Front End (APP)
+
 # Acesse uma nova pasta do projeto no terminal/cmd
 $ cd mobile2
 
 # Instale as dependências
 $ npm install
+
+# Certifique-se de ter um emulador rodando em sua máquina, acesse o arquivo src/service/api.js e coloque o ip da máquina servidor.
 
 # Execute o comando de acordo com seu aparelho android ou ios:
 $ react-native run-android
