@@ -34,6 +34,8 @@ $ node server.js
 
 # O servidor inciará na porta:8080 - acesse <http://localhost:8080>
 
+```
+
 ### 🎲 Rodando o Front End (APP)
 
 # Acesse uma nova pasta do projeto no terminal/cmd
